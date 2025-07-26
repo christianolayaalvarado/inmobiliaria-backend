@@ -4,9 +4,10 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const clienteRoutes = require('./routes/clienteRoutes');
 const path = require('path');
+const app = express();
 
 dotenv.config();
-const app = express();
+
 
 // Middleware
 app.use(cors());
