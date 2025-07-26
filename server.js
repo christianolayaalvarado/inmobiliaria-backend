@@ -7,15 +7,25 @@ const clienteRoutes = require('./routes/clienteRoutes');
 dotenv.config();
 const app = express();
 
+// Middleware
 app.use(cors());
 app.use(express.json());
 
+// Ruta base para verificar
+app.get('/', (req, res) => {
+  res.send('API de clientes inmobiliarios en línea');
+});
+
+// Rutas
 app.use('/api/clientes', clienteRoutes);
 
+// Conexión a MongoDB
 mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log('MongoDB conectado'))
   .catch(err => console.log('Error MongoDB:', err));
 
-app.listen(process.env.PORT || 4000, () => {
-  console.log('Servidor corriendo en el puerto', process.env.PORT || 4000);
+//Servidor
+const PORT = process.env.PORT || 4000;
+app.listen(PORT, () => {
+   console.log(`🚀 Servidor corriendo en el puerto ${PORT}`);
 });
