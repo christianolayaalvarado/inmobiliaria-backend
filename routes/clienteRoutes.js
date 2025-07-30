@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const Cliente = require('../models/Cliente');
+const auth = require('../middlewares/authMiddleware');
 
-// Ruta para exportar todos los clientes en CSV
-router.get('/exportar', async (req, res) => {
+// ✅ Ruta protegida para exportar clientes
+router.get('/exportar', auth, async (req, res) => {
   try {
     const clientes = await Cliente.find().lean();
 
@@ -27,11 +28,7 @@ router.get('/exportar', async (req, res) => {
   }
 });
 
-module.exports = router;
-
-
-
-// ✅ POST: registrar nuevo cliente
+// ✅ Ruta pública para registrar cliente
 router.post('/registrar', async (req, res) => {
   try {
     const nuevoCliente = new Cliente(req.body);
