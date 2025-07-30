@@ -6,12 +6,18 @@ const AdminSchema = new mongoose.Schema({
   contraseña: { type: String, required: true }
 });
 
-// Hash antes de guardar
-AdminSchema.pre('save', async function (next) {
+// Pre-save hook para hashear la contraseña si fue modificada o nueva
+AdminSchema.pre('save', async function(next) {
   if (!this.isModified('contraseña')) return next();
-  const salt = await bcrypt.genSalt(10);
-  this.contraseña = await bcrypt.hash(this.contraseña, salt);
-  next();
+
+  try {
+    const salt = await bcrypt.genSalt(10);
+    this.contraseña = await bcrypt.hash(this.contraseña, salt);
+    next();
+  } catch (err) {
+    next(err);
+  }
 });
 
 module.exports = mongoose.model('Admin', AdminSchema);
+
